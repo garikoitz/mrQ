@@ -53,7 +53,65 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % (C) Mezer lab, the Hebrew University of Jerusalem, Israel
 %  2015
 %
-%
+%  VAmos a meter a mano los TE y TR hasta que no arreglen esto...
+% dataDir is the location where the NIfTI are saved.
+
+
+
+
+
+% dir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/nifti';
+% outDir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/mrQAnalysis'; 
+% inputData_spgr = struct;
+% inputData_spgr.rawDir = dir;
+% %
+% % A list of NIfTI names. (A unique string from the names is enough)
+% inputData_spgr.name = {'FA4' 'FA10' 'FA20' 'FA30'};
+% %
+% % The TR of each NIfTI in the list (in msec)
+% inputData_spgr.TR = [12 12 12 12];
+% %
+% % The TE of each NIfTI in the list (in msec)
+% inputData_spgr.TE = [2.27 2.27 2.27 2.27];
+% %
+% % The flip angle of each NIfTI in the list (in degrees)
+% inputData_spgr.flipAngle = [4 10 20 30];
+% %
+% % The field strength of each NIfTI in the list (in Teslas)
+% inputData_spgr.fieldStrength = [3 3 3 3];
+% % Next, create a structure called "inputData_seir". Set the required SEIR parameters:
+% 
+% %        B. Define the SEIR header info:
+% %
+% inputData_seir = struct;
+% % dataDir is the location where the NIfTI are saved
+% inputData_seir.rawDir = dir;
+% %
+% % A list of NIfTI names.  (A unique string from the names is enough)
+% inputData_seir.name = {'IT50'  'IT400'  'IT1200'  'IT2400'};
+% %
+% % The TR of each NIfTI in the list (in msec)
+% inputData_seir.TR = [3000 3000 3000 3000];
+% %
+% % The TE of each NIfTI in the list (in msec)
+% inputData_seir.TE = [49 49 49 49];
+% %
+% % The inversion time of each NIfTI in the list (in msec)
+% inputData_seir.IT = [50 400 1200 2400];
+% 
+% % RUN IT
+% mrQ_run(dir, outDir, inputData_spgr, inputData_seir,[], {'sungrid', 0})
+% mrQ_run(dir, outDir, inputData_spgr, inputData_seir, [], {'autoacpc', 0, 'sungrid', 1, 'wl', 0, 'refim', RefImageFile})
+
+% AVIV EMAIL
+% Yes this is the problem. Check what nifti is empty? I think it is the B1. 
+% it seem the code is skipping the B1 fit.
+% 
+% In mrQ_run this is step VII Build B1 from Line 179.
+% try to see if it is running this part and if not why.
+
+
+
 
 
 %% I. Create the initial structure
