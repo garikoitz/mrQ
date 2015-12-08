@@ -60,10 +60,13 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 
 
 
-% dir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/nifti';
+% inDir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/nifti';
 % outDir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/mrQAnalysis'; 
+% inDir = '/Users/gari/gDrive/BCBL/PROYECTOS/MINI/mrQ2_MBP/nifti';
+% outDir = '/Users/gari/Documents/BCBL_PROJECTS/MINI/ANALYSIS/mrQ/PILOT05'; 
+% 
 % inputData_spgr = struct;
-% inputData_spgr.rawDir = dir;
+% inputData_spgr.rawDir = inDir;
 % %
 % % A list of NIfTI names. (A unique string from the names is enough)
 % inputData_spgr.name = {'FA4' 'FA10' 'FA20' 'FA30'};
@@ -85,7 +88,7 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % %
 % inputData_seir = struct;
 % % dataDir is the location where the NIfTI are saved
-% inputData_seir.rawDir = dir;
+% inputData_seir.rawDir = inDir;
 % %
 % % A list of NIfTI names.  (A unique string from the names is enough)
 % inputData_seir.name = {'IT50'  'IT400'  'IT1200'  'IT2400'};
@@ -100,17 +103,8 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % inputData_seir.IT = [50 400 1200 2400];
 % 
 % % RUN IT
-% mrQ_run(dir, outDir, inputData_spgr, inputData_seir,[], {'sungrid', 0})
-% mrQ_run(dir, outDir, inputData_spgr, inputData_seir, [], {'autoacpc', 0, 'sungrid', 1, 'wl', 0, 'refim', RefImageFile})
-
-% AVIV EMAIL
-% Yes this is the problem. Check what nifti is empty? I think it is the B1. 
-% it seem the code is skipping the B1 fit.
+% mrQ_run(inDir, outDir, inputData_spgr, inputData_seir,[], {'sungrid', 0})
 % 
-% In mrQ_run this is step VII Build B1 from Line 179.
-% try to see if it is running this part and if not why.
-
-
 
 
 
@@ -366,8 +360,11 @@ if (mrQ.VIP_WF_done==0)
     
     [mrQ] = mrQ_WF(mrQ);
     
-    
-    [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
+    % GLU: ERROR: Field assignment to a non-structure array object.
+    % [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
+    % I edited mrQ_VIP.m too
+    % GLU end.
+    mrQ = mrQ_VIP(mrQ);
     
     mrQ.VIP_WF_done=1;
     save(mrQ.name,'mrQ');
