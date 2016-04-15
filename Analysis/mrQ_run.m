@@ -106,7 +106,10 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % 
 % % RUN IT
 % mrQ_run(inDir, outDir, inputData_spgr, inputData_seir,[], {'sungrid', 0})
+
 % mrQ_run(inDir, outDir, [], [],[], {'sungrid', 0})
+
+
 
 
 
@@ -349,6 +352,11 @@ if (mrQ.VIP_WF_done==0)
     
     [mrQ] = mrQ_WF(mrQ);
     
+    % GLU: ERROR: Field assignment to a non-structure array object.
+    % [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
+    % I edited mrQ_VIP.m too
+    % GLU end.
+    mrQ = mrQ_VIP(mrQ);
     
     mrQ.VIP_WF_done=1;
     save(mrQ.name,'mrQ');
