@@ -64,6 +64,8 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % outDir = '/sni-storage/wandell/users/glerma/Documents/mrQPRUEBA/PILOT05/mrQAnalysis'; 
 % inDir = '/Users/gari/gDrive/BCBL/PROYECTOS/MINI/mrQ2_MBP/nifti';
 % outDir = '/Users/gari/Documents/BCBL_PROJECTS/MINI/ANALYSIS/mrQ/PILOT05'; 
+% inDir = '/bcbl/home/public/Gari/MINI/DATA/dicoms/S001_DAY2_MINITWICE_4189/qMRI/nifti';
+% outDir = '/bcbl/home/public/Gari/MINI/ANALYSIS/mrQ/S001_DAY2_MINITWICE_4189'; 
 % 
 % inputData_spgr = struct;
 % inputData_spgr.rawDir = inDir;
@@ -104,7 +106,7 @@ function mrQ_run(dir,outDir,inputData_spgr,inputData_seir,B1file, varArgIn)
 % 
 % % RUN IT
 % mrQ_run(inDir, outDir, inputData_spgr, inputData_seir,[], {'sungrid', 0})
-% 
+% mrQ_run(inDir, outDir, [], [],[], {'sungrid', 0})
 
 
 
@@ -347,11 +349,6 @@ if (mrQ.VIP_WF_done==0)
     
     [mrQ] = mrQ_WF(mrQ);
     
-    % GLU: ERROR: Field assignment to a non-structure array object.
-    % [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
-    % I edited mrQ_VIP.m too
-    % GLU end.
-    mrQ = mrQ_VIP(mrQ);
     
     mrQ.VIP_WF_done=1;
     save(mrQ.name,'mrQ');
