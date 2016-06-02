@@ -347,16 +347,38 @@ if ~isfield(mrQ,'VIP_WF_done')
     mrQ.VIP_WF_done=0;
 end
 
+% if (mrQ.VIP_WF_done==0)
+%     fprintf('\n Calculate VIP, TV and SIR form T1 and WF maps               \n');
+%     
+%     [mrQ] = mrQ_WF(mrQ);
+%     
+%     % GLU: ERROR: Field assignment to a non-structure array object.
+%     % [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
+%     % I edited mrQ_VIP.m too
+%     % GLU end.
+%     mrQ = mrQ_VIP(mrQ);
+%     
+%     mrQ.VIP_WF_done=1;
+%     save(mrQ.name,'mrQ');
+%     
+%     fprintf('\n Calculation of VIP, MTV and SIR  - done!              \n');
+%     %
+%     % XIII. Create a series of synthetic T1w images
+% 
+%     [mrQ.T1w_file,mrQ.T1w_file1] =mrQ_T1wSynthesis1(mrQ);
+%     fprintf('\n Calculation synthetic T1w- done!              \n');
+% 
+% else 
+%      fprintf('\n Using previously calculated VIP, MTV, SIR and synthetic T1w             \n');
+% end
+
 if (mrQ.VIP_WF_done==0)
     fprintf('\n Calculate VIP, TV and SIR form T1 and WF maps               \n');
     
     [mrQ] = mrQ_WF(mrQ);
     
-    % GLU: ERROR: Field assignment to a non-structure array object.
-    % [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
-    % I edited mrQ_VIP.m too
-    % GLU end.
-    mrQ = mrQ_VIP(mrQ);
+    
+    [mrQ.AnalysisInfo, mrQ] = mrQ_VIP(mrQ);
     
     mrQ.VIP_WF_done=1;
     save(mrQ.name,'mrQ');
@@ -371,8 +393,6 @@ if (mrQ.VIP_WF_done==0)
 else 
      fprintf('\n Using previously calculated VIP, MTV, SIR and synthetic T1w             \n');
 end
-
-
 
 
 %% XIV. Organize the OutPut directory
