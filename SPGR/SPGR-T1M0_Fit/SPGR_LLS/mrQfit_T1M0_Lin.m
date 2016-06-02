@@ -150,13 +150,17 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
         % using ANTs software
         
         % Find the voxels that are more than 2 stdev below the
-        % mean brain signal
-        cutV=mean(s(1).imData(brainMask)) -2*std(s(1).imData(brainMask));
+        % mean brain signal. First we will chose the image with max signal.
+        for ii=1:length(s) 
+           M(ii)= mean(s(ii).imData(brainMask));
+        end
+        jj=find(M==max(M)); % max mean signal.
+        cutV=mean(s(jj).imData(brainMask)) -2*std(s(jj).imData(brainMask));
         %noise extraction - we will need to generalize this somehow especially
         
         % selecting the relevant slices (this is not beautiful)
         HM=B1;
-        HM(s(1).imData<cutV)=0;
+        HM(s(jj).imData<cutV)=0;
         HM(:,:,1:min(z)+3)=0;
         HM(:,:,max(z)+3:end)=0;
         for dd=1:length(s)
