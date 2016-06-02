@@ -11,7 +11,8 @@ function mrQ=mrQ_SEIR(mrQ)
 % easilly bypass out checks using, for example, rerun mrQ with the
 % additional input {'seir_done',1}: 
 % mrQ_run(inputDir,outDir,[],[],[], {'seir_done',1}),
-%
+% (C) Mezer lab, the Hebrew University of Jerusalem, Israel, Copyright 2016
+
 if isfield(mrQ,'AntSQantTresh');  
 else
     mrQ.AntSQantTresh=0.65;
@@ -26,6 +27,7 @@ if ~exist(SEIR_fit_dir, 'dir'), mkdir(SEIR_fit_dir); end
 
 mrQ.AntSQantToHigh=inf;   
 
+% <<<<<<< HEAD: GLU: just in case maintaining the conflicts as comments
 for ii=1: length(mrQ.inputdata_seir.IT) %% in each iteration, align the SEIR images with a different image as the target image
     % Keeps track of the variables we use.
     % For details, see inside the function.
@@ -165,6 +167,11 @@ if mrQ.AntSQant> mrQ.AntSQantTresh;
     % saving the correct AntSQant value
     mrQ.AntSQant = min(mrQ.AntSQantToHigh);
     save(mrQ.name,'mrQ');
+% ======= GLU commented
+% mrQ=mrQ_Call_AntsAlign_forSEIR_SPGR(mrQ);  GLU commented
+% if mrQ.Ants_Info.QuantAntsScore > mrQ.QuantAntsThresh;  GLU commented
+   
+% >>>>>>> c8566d45979cd83ffe8e86fdcd6a2e6d89ba1f43 GLU commented
     error('we can not trust the EPI-SPGR registration \nPlease manually check the registration between \n %s and \n %s \n If it is ok, manually change mrQ.SEIR_done to be =1.', mrQ.SEIR_epi_T1file,mrQ.Ants_Info.T1_spgr_epi)
 end
 

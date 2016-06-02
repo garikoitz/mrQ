@@ -1,4 +1,6 @@
-function [mrQ]=mrQfit_T1M0_Lin(mrQ,B1File,MaskFile,outDir,dataDir,clobber)
+function [Outputs]=mrQfit_T1M0_Lin(mrQ,dataDir,outDir,B1File,MaskFile,clobber)
+
+
 %  [mrQ]=mrQfit_T1M0_Lin(mrQ,B1File,MaskFile,outDir,dataDir,clobber)
 %
 % This function creates NIfTI files in the outDir, and saves their
@@ -31,13 +33,16 @@ function [mrQ]=mrQfit_T1M0_Lin(mrQ,B1File,MaskFile,outDir,dataDir,clobber)
 % Author: Aviv Mezer, 01.18.2011
 % rewrite by AM. June 16 2011
 % rewrite by AM. July 29 2011
+% rewrite by AM. May 29 2016
+% (C) Mezer lab, the Hebrew University of Jerusalem, Israel, Copyright 2016
+
 %     %fit for the B1 fitting to be based on local regression
 
 
 %% I. Check INPUTS and set defaults
 
 if notDefined('dataDir');
-    dataDir = mrQ.spgr_initDir;
+    dataDir = mrQ.mrQ.InitSPGR.spgr_initDir ;
 end
 if notDefined('outDir');
     outDir =dataDir;
@@ -103,7 +108,7 @@ t1file   = fullfile(outDir,['T1_LFit.nii.gz']);
 M0file   = fullfile(outDir,['M0_LFit.nii.gz']);
 
 % Read in existing T1, M0 and the brain mask (if they exist)
-if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
+%if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
     % disp([' Loding existing  T1  M0 and brain mask' ]);
     
     
@@ -126,7 +131,7 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
     
     t1_copy=t1;M0_copy=M0; % make a copy
     
-    if notDefined('MaskFile')
+   % if notDefined('MaskFile')
         HMfile   = fullfile(outDir,'HeadMask.nii.gz');  % brain mask
         BMfile   = fullfile(outDir,'brainMask.nii.gz'); %head mask
         % Create the brain mask
@@ -171,6 +176,15 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
         for i=1:size(HM,3)
             HM(:,:,i)=imfill(HM(:,:,i),'holes');
         end;
+        %%
+        HMtmp=HM;
+
+                HMtmp(t1<0.4)=0;
+
+        for i=1:size(HM,3)
+           FracNonBrainT1(i)= length(find(HMtmp(:,:,i)))./ length(find(HM(:,:,i))) ;
+        end;
+        %%
         HM=logical(HM);
         
         %%  VII. SAVE head mask and brain mask as niftis
@@ -178,12 +192,12 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
         dtiWriteNiftiWrapper(single(brainMask), xform, BMfile);
         mrQ.HeadMask=HMfile;
         mrQ.BrainMask=BMfile;
-    else
+   % else
         
-        brainMask=niftiRead(MaskFile);
-        brainMask=logical(brainMask.data);
-        
-    end
+%         brainMask=niftiRead(MaskFile);
+%         brainMask=logical(brainMask.data);
+%         
+%     end
     
     t1(~brainMask) = 0;
     M0(~brainMask) = 0;
@@ -192,11 +206,11 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
     dtiWriteNiftiWrapper(single(t1), xform, t1file);
     dtiWriteNiftiWrapper(single(M0), xform, M0file);
     
-    mrQ.T1_LFit=t1file;
-    mrQ.M0_LFit=M0file;
+%     mrQ.T1_LFit=t1file;
+%     mrQ.M0_LFit=M0file;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    if ~notDefined('HMfile')
+    %if ~notDefined('HMfile')
         t1=t1_copy; M0=M0_copy;
         t1(~HM) = 0;
         M0(~HM) = 0;
@@ -207,9 +221,26 @@ if~( exist(t1file,'file') &&  exist(M0file,'file')  && ~clobber),
         
         dtiWriteNiftiWrapper(single(t1), xform, t1fileHM);
         dtiWriteNiftiWrapper(single(M0), xform, M0fileHM);
-        mrQ.T1_LFit_HM=t1fileHM;
-        mrQ.M0_LFit_HM=M0fileHM;
-        
-    end
+%         mrQ.T1_LFit_HM=t1fileHM;
+%         mrQ.M0_LFit_HM=M0fileHM;
+%         mrQ.FracNonBrainT1=FracNonBrainT1;
+
+   % end
+    % mrQ.HeadMask=HMfile;
+    %         mrQ.BrainMask=BMfile;
+    %
+    %     mrQ.T1_LFit=t1file;
+    %     mrQ.M0_LFit=M0file;
+    %  mrQ.T1_LFit_HM=t1fileHM;
+    %         mrQ.M0_LFit_HM=M0fileHM;
+    %         mrQ.FracNonBrainT1=FracNonBrainT1;
     
-end;
+%end;
+
+Outputs.HeadMask=HMfile;
+Outputs.BrainMask=BMfile;
+Outputs.T1_LFit=t1file;
+Outputs.M0_LFit=M0file;
+Outputs.T1_LFit_HM=t1fileHM;
+Outputs.M0_LFit_HM=M0fileHM;
+Outputs.FracNonBrainT1=FracNonBrainT1;
